@@ -2169,39 +2169,46 @@ let finalStarted = false;
    OPEN LETTER
 ========================================================= */
 
-function startMusic() {
-
-    music.volume = 1.0;
-
-    const playPromise = music.play();
-
-    if (playPromise !== undefined) {
-        playPromise
-            .then(function() {
-                musicButton.innerHTML = "🔊";
-            })
-            .catch(function() {
-                musicButton.innerHTML = "♫";
-            });
-    }
-}
-
-
 function openLetter() {
 
     opening.classList.add("hidden");
+
     mainContent.classList.add("visible");
 
-    /* Musik dimulai dari interaksi langsung tombol Buka Surat. */
-    startMusic();
+
+    /* =====================================================
+       MUSIK — mulai setelah tombol Buka Surat ditekan
+       ===================================================== */
+
+    try {
+        music.load();
+
+        const playMusic = music.play();
+
+        if (playMusic !== undefined) {
+            playMusic
+                .then(function() {
+                    musicButton.innerHTML = "🔊";
+                })
+                .catch(function() {
+                    musicButton.innerHTML = "♫";
+                });
+        }
+    } catch (error) {
+        musicButton.innerHTML = "♫";
+    }
+
 
     setTimeout(function() {
+
         document
             .getElementById("letter")
             .scrollIntoView({
                 behavior: "smooth"
             });
+
     }, 900);
+
 }
 
 
@@ -2212,12 +2219,35 @@ function openLetter() {
 function toggleMusic() {
 
     if (music.paused) {
-        startMusic();
+
+        try {
+            music.load();
+
+            const playMusic = music.play();
+
+            if (playMusic !== undefined) {
+                playMusic
+                    .then(function() {
+                        musicButton.innerHTML = "🔊";
+                    })
+                    .catch(function() {
+                        musicButton.innerHTML = "♫";
+                    });
+            }
+        } catch (error) {
+            musicButton.innerHTML = "♫";
+        }
+
     }
+
     else {
+
         music.pause();
+
         musicButton.innerHTML = "♫";
+
     }
+
 }
 
 
